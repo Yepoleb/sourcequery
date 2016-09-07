@@ -1,6 +1,7 @@
 import concurrent.futures
-import flask
 import socket
+
+import flask
 import valve.source.a2s
 import valve.source.messages
 
