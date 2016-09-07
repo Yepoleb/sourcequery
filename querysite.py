@@ -30,7 +30,7 @@ def redirect_index():
 
 @app.route("/query")
 def query():
-    server_arg = flask.request.args.get("server", default=None)
+    server_arg = flask.request.args.get("server", default="")
     server_arg = server_arg.strip()
     if not server_arg:
         return flask.render_template("query.html", status="Empty")
