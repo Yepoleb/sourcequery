@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Source Query</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/bootstrap.css">
+    <style>
+      body {
+        margin: 40px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Server Query</h3>
+          </div>
+          <div class="panel-body">
+            <form action="query">
+              <div class="input-group">         
+                <input type="text" name="server" class="input-lg form-control" placeholder="IP:Port">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-lg btn-primary">Query</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% if status == "Error" %}
+      <div class="col-md-12">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Failed</h3>
+          </div>
+          <div class="panel-body">
+            {{ error }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if status == "Success" %}
+      <div class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Result</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped">
+              <colgroup>
+                <col class="col-xs-3">
+                <col class="col-xs-9">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Property</th><th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Name</td><td>{{ info.server_name }}</td>
+                </tr>
+                <tr>
+                  <td>Players</td><td>{{ info.player_count }}/{{ info.max_players }}</td>
+                </tr>
+                <tr>
+                  <td>Game</td><td>{{ info.game }}</td>
+                </tr>
+                <tr>
+                  <td>Map</td><td>{{ info.map }}</td>
+                </tr>
+                <tr>
+                  <td>Bots</td><td>{{ info.bot_count }}</td>
+                </tr>
+                <tr>
+                  <td>App ID</td><td>{{ info.app_id }}</td>
+                </tr>
+                <tr>
+                  <td>Gamedir</td><td>{{ info.folder }}</td>
+                </tr>
+                <tr>
+                  <td>Platform</td><td>{{ info.platform }}</td>
+                </tr>
+                <tr>
+                  <td>Server Type</td><td>{{ info.server_type }}</td>
+                </tr>
+                <tr>
+                  <td>Password</td><td>{{ info.password_protected }}</td>
+                </tr>
+                <tr>
+                  <td>VAC Enabled</td><td>{{ info.vac_enabled }}</td>
+                </tr>
+                <tr>
+                  <td>Version</td><td>{{ info.version }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Players</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped">
+              <colgroup>
+                <col class="col-xs-7">
+                <col class="col-xs-2">
+                <col class="col-xs-3">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Name</th><th>Score</th><th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for player in players %}
+                <tr>
+                  <td>{{ player.name }}</td><td>{{ player.score }}</td><td>{{ player.duration }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
