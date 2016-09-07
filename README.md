@@ -2,20 +2,20 @@
 
 Website for querying servers that support the [A2S] protocol.
 
-# Runing locally
+## Runing locally
 
-Run the script with `python3 querysite.py` and open http://localhost:5001 in your browser.
+Run the script with `python3 querysite.py` and open [http://localhost:5001](http://localhost:5001) in your browser.
 
-# Deployment
+## Deployment
 
 Idk, you tell me. I haven't figured that out myself.
 
-# Dependencies
+## Dependencies
 
 * [python-valve]
 * [flask]
 
-# License
+## License
 
 AGPLv3
 
