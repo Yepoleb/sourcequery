@@ -65,30 +65,40 @@ def query():
         players_future = pool.submit(players_querier.players)
     concurrent.futures.wait((info_future, players_future))
     
-    server_exception = info_future.exception() or players_future.exception()
-    if type(server_exception) == valve.source.a2s.NoResponseError:
+    info_except = info_future.exception()
+    players_except = players_future.exception()
+
+    if type(info_except) == valve.source.a2s.NoResponseError:
         return flask.render_template("query.html", status="Error",
             error="Server did not respond."), 200
-    if type(server_exception) == valve.source.messages.BrokenMessageError:
+    if type(info_except) == valve.source.messages.BrokenMessageError:
         return flask.render_template("query.html", status="Error",
             error="Server sent a broken response."), 200
-    elif server_exception is not None:
+    elif info_except is not None:
         raise server_exception
-    
+
     info_res = info_future.result()
-    players_res = players_future.result()
-        
     info = dict(info_res)
     info["password_protected"] = yesno(info_res["password_protected"])
     info["vac_enabled"] = yesno(info_res["vac_enabled"])
     
+    if type(players_except) == valve.source.a2s.NoResponseError:
+        return flask.render_template("query.html", status="InfoOnly",
+            info=info, error="Server did not respond."), 200
+    if type(players_except) == valve.source.messages.BrokenMessageError:
+        return flask.render_template("query.html", status="InfoOnly",
+            info=info, error="Server sent a broken response."), 200
+    elif players_except is not None:
+        raise server_exception
+
+    players_res = players_future.result()
     players = []
     for player_entry in players_res["players"]:
         player = dict(player_entry)
         player["duration"] = format_duration(player_entry["duration"])
         players.append(player)
     players.sort(key=lambda p: p["score"], reverse=True)
-    
+
     return flask.render_template("query.html", status="Success", 
         info=info, players=players)
 

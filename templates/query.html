@@ -42,7 +42,7 @@
         </div>
       </div>
       {% endif %}
-      {% if status == "Success" %}
+      {% if status == "Success" or status == "InfoOnly" %}
       <div class="col-md-6">
         <div class="panel panel-success">
           <div class="panel-heading">
@@ -101,6 +101,18 @@
           </div>
         </div>
       </div>
+      {% if status == "InfoOnly" %}
+      <div class="col-md-6">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Players</h3>
+          </div>
+          <div class="panel-body">
+            {{ error }}
+          </div>
+        </div>
+      </div>
+      {% else %}
       <div class="col-md-6">
         <div class="panel panel-success">
           <div class="panel-heading">
@@ -129,7 +141,8 @@
           </div>
         </div>
       </div>
-      {% endif %}
+      {% endif %} {# status == "InfoOnly" #}
+      {% endif %} {# status == "Success" or status == "InfoOnly" #}
     </div>
   </body>
 </html>
