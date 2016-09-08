@@ -44,7 +44,7 @@ def query():
     else:
         return flask.render_template("query.html", status="Error",
             error="Port is missing.", server=server_arg), 400
-    
+
     try:
         port = int(port_str)
     except ValueError:
@@ -52,7 +52,7 @@ def query():
             error="Port is not a number.", server=server_arg), 400
     if not 0 < port < 65536:
         return flask.render_template("query.html", status="Error",
-            error="Port has to be between 0 and 65535.", 
+            error="Port has to be between 0 and 65535.",
             server=server_arg), 400
 
     try:
@@ -68,7 +68,7 @@ def query():
         info_future = pool.submit(info_querier.info)
         players_future = pool.submit(players_querier.players)
     concurrent.futures.wait((info_future, players_future))
-    
+
     info_except = info_future.exception()
     players_except = players_future.exception()
 
@@ -85,14 +85,14 @@ def query():
     info = dict(info_res)
     info["password_protected"] = yesno(info_res["password_protected"])
     info["vac_enabled"] = yesno(info_res["vac_enabled"])
-    
+
     if type(players_except) == valve.source.a2s.NoResponseError:
         return flask.render_template("query.html", status="InfoOnly",
             info=info, error="Server did not respond.",
             server=server_arg), 200
     if type(players_except) == valve.source.messages.BrokenMessageError:
         return flask.render_template("query.html", status="InfoOnly",
-            info=info, error="Server sent a broken response.", 
+            info=info, error="Server sent a broken response.",
             server=server_arg), 200
     elif players_except is not None:
         raise players_except
@@ -107,7 +107,7 @@ def query():
         players.append(player)
     players.sort(key=lambda p: p["score"], reverse=True)
 
-    return flask.render_template("query.html", status="Success", 
+    return flask.render_template("query.html", status="Success",
         info=info, players=players, server=server_arg), 200
 
 @app.errorhandler(500)
