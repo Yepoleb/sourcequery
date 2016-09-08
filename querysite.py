@@ -95,6 +95,8 @@ def query():
     players = []
     for player_entry in players_res["players"]:
         player = dict(player_entry)
+        if not player["name"].strip():
+            continue
         player["duration"] = format_duration(player_entry["duration"])
         players.append(player)
     players.sort(key=lambda p: p["score"], reverse=True)
