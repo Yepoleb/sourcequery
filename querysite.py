@@ -26,7 +26,7 @@ app = flask.Flask(__name__)
 
 @app.route("/")
 def redirect_index():
-    return flask.redirect("/query")
+    return flask.redirect(flask.url_for("query"))
 
 @app.route("/query")
 def query():
