@@ -38,14 +38,14 @@
             <form action="query">
               <div class="table-layout">
                 <span class="table-col col-expand">
-                  <input type="text" name="server" class="input-lg form-control" placeholder="Enter Server Address">
+                  <input type="text" name="server" class="input-lg form-control" placeholder="Enter Server Address" value="{{ server }}">
                 </span>
                 <span class="table-col">
                   <button type="submit" class="btn btn-lg btn-primary">Query</button>
                 </span>
                 {% if status != "Empty" %}
                 <span class="table-col">
-                  <button type="button" class="btn btn-lg btn-success" onclick="window.location.reload(true);">Refresh</button>
+                  <button type="button" class="btn btn-lg btn-success" onclick="window.location.reload();">Refresh</button>
                 </span>
                 {% endif %}
               </div>

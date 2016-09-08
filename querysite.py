@@ -43,22 +43,23 @@ def query():
         ip, port_str = server_arg.split(None, 1) # Split on whitespace
     else:
         return flask.render_template("query.html", status="Error",
-            error="Port is missing."), 400
+            error="Port is missing.", server=server_arg), 400
     
     try:
         port = int(port_str)
     except ValueError:
         return flask.render_template("query.html", status="Error",
-            error="Port is not a number."), 400
+            error="Port is not a number.", server=server_arg), 400
     if not 0 < port < 65536:
         return flask.render_template("query.html", status="Error",
-            error="Port has to be between 0 and 65535."), 400
+            error="Port has to be between 0 and 65535.", 
+            server=server_arg), 400
 
     try:
         socket.getaddrinfo(ip, port_str)
     except socket.gaierror:
         return flask.render_template("query.html", status="Error",
-            error="Invalid server address."), 400
+            error="Invalid server address.", server=server_arg), 400
 
     # We need 2 queriers because requests are not thread safe
     info_querier = valve.source.a2s.ServerQuerier((ip, port), timeout=3)
@@ -73,12 +74,12 @@ def query():
 
     if type(info_except) == valve.source.a2s.NoResponseError:
         return flask.render_template("query.html", status="Error",
-            error="Server did not respond."), 200
+            error="Server did not respond.", server=server_arg), 200
     if type(info_except) == valve.source.messages.BrokenMessageError:
         return flask.render_template("query.html", status="Error",
-            error="Server sent a broken response."), 200
+            error="Server sent a broken response.", server=server_arg), 200
     elif info_except is not None:
-        raise server_exception
+        raise info_except
 
     info_res = info_future.result()
     info = dict(info_res)
@@ -87,12 +88,14 @@ def query():
     
     if type(players_except) == valve.source.a2s.NoResponseError:
         return flask.render_template("query.html", status="InfoOnly",
-            info=info, error="Server did not respond."), 200
+            info=info, error="Server did not respond.",
+            server=server_arg), 200
     if type(players_except) == valve.source.messages.BrokenMessageError:
         return flask.render_template("query.html", status="InfoOnly",
-            info=info, error="Server sent a broken response."), 200
+            info=info, error="Server sent a broken response.", 
+            server=server_arg), 200
     elif players_except is not None:
-        raise server_exception
+        raise players_except
 
     players_res = players_future.result()
     players = []
@@ -105,7 +108,7 @@ def query():
     players.sort(key=lambda p: p["score"], reverse=True)
 
     return flask.render_template("query.html", status="Success", 
-        info=info, players=players)
+        info=info, players=players, server=server_arg), 200
 
 @app.errorhandler(500)
 def server_error(e):
