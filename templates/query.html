@@ -9,6 +9,22 @@
       body {
         margin: 40px auto;
       }
+      .table-layout {
+        display: table;
+      }
+      .table-col {
+        display: table-cell;
+        white-space: nowrap;
+        width: 1%;
+        vertical-align: middle;
+        padding-right: 5px;
+      }
+      .table-col:last-child {
+        padding-right: 0px;
+      }
+      .col-expand {
+        width: 100%;
+      }
     </style>
   </head>
   <body>
@@ -20,11 +36,18 @@
           </div>
           <div class="panel-body">
             <form action="query">
-              <div class="input-group">         
-                <input type="text" name="server" class="input-lg form-control" placeholder="IP:Port">
-                <span class="input-group-btn">
+              <div class="table-layout">
+                <span class="table-col col-expand">
+                  <input type="text" name="server" class="input-lg form-control" placeholder="Enter Server Address">
+                </span>
+                <span class="table-col">
                   <button type="submit" class="btn btn-lg btn-primary">Query</button>
                 </span>
+                {% if status != "Empty" %}
+                <span class="table-col">
+                  <button type="button" class="btn btn-lg btn-success" onclick="window.location.reload(true);">Refresh</button>
+                </span>
+                {% endif %}
               </div>
             </form>
           </div>
