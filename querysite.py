@@ -32,6 +32,9 @@ def redirect_index():
 def query():
     server_arg = flask.request.args.get("server", default="")
     server_arg = server_arg.strip()
+    if server_arg.startswith("steam://connect/"):
+        server_arg = server_arg[len("steam://connect/"):]
+
     if not server_arg:
         return flask.render_template("query.html", status="Empty")
     if ":" in server_arg:
