@@ -8,7 +8,7 @@ Run the script with `python3 querysite.py` and open [http://localhost:5001](http
 
 ## Deployment
 
-Idk, you tell me. I haven't figured that out myself.
+Check out the flask manual about [Deployment Options]. An example uwsgi configuration is provided in `/uwsgi`.
 
 ## Dependencies
 
@@ -22,3 +22,4 @@ AGPLv3
 [A2S]: https://developer.valvesoftware.com/wiki/Server_queries
 [python-valve]: https://github.com/Holiverh/python-valve
 [flask]: http://flask.pocoo.org/
+[Deployment Options]: http://flask.pocoo.org/docs/latest/deploying/
