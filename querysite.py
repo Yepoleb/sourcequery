@@ -64,7 +64,7 @@ def query():
     # We need 2 queriers because requests are not thread safe
     info_querier = valve.source.a2s.ServerQuerier((ip, port), timeout=3)
     players_querier = valve.source.a2s.ServerQuerier((ip, port), timeout=3)
-    with concurrent.futures.ThreadPoolExecutor() as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
         info_future = pool.submit(info_querier.info)
         players_future = pool.submit(players_querier.players)
     concurrent.futures.wait((info_future, players_future))
