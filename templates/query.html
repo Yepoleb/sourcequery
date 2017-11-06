@@ -79,46 +79,81 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th>Property</th><th>Value</th>
+                  <th>Property</th>
+                  <th>Value</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Name</td><td>{{ info.server_name }}</td>
+                  <td>Name</td>
+                  <td>{{ info.server_name }}</td>
                 </tr>
                 <tr>
-                  <td>Players</td><td>{{ info.player_count }}/{{ info.max_players }}</td>
+                  <td>Players</td>
+                  <td>{{ info.player_count }}/{{ info.max_players }}</td>
                 </tr>
                 <tr>
-                  <td>Game</td><td>{{ info.game }}</td>
+                  <td>Game</td>
+                  <td>{{ info.game }}</td>
                 </tr>
                 <tr>
-                  <td>Map</td><td>{{ info.map }}</td>
+                  <td>Map</td>
+                  <td>{{ info.map }}</td>
+                </tr>
+                {% if info.keywords is defined %}
+                <tr>
+                  <td>Tags</td>
+                  <td>{{ info.keywords|replace(",", ", ") }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <td>Bots</td>
+                  <td>{{ info.bot_count }}</td>
                 </tr>
                 <tr>
-                  <td>Bots</td><td>{{ info.bot_count }}</td>
+                  <td>App ID</td>
+                  <td>{{ info.app_id }}</td>
                 </tr>
                 <tr>
-                  <td>App ID</td><td>{{ info.app_id }}</td>
+                  <td>Gamedir</td>
+                  <td>{{ info.folder }}</td>
+                </tr>
+                {% if info.steam_id is defined %}
+                <tr>
+                  <td>Steam ID</td>
+                  <td>{{ info.steam_id }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <td>Platform</td>
+                  <td>{{ info.platform }}</td>
                 </tr>
                 <tr>
-                  <td>Gamedir</td><td>{{ info.folder }}</td>
+                  <td>Server Type</td>
+                  <td>{{ info.server_type }}</td>
                 </tr>
                 <tr>
-                  <td>Platform</td><td>{{ info.platform }}</td>
+                  <td>Password</td>
+                  <td>{{ info.password_protected|yesno }}</td>
                 </tr>
                 <tr>
-                  <td>Server Type</td><td>{{ info.server_type }}</td>
+                  <td>VAC Enabled</td>
+                  <td>{{ info.vac_enabled|yesno }}</td>
                 </tr>
                 <tr>
-                  <td>Password</td><td>{{ info.password_protected }}</td>
+                  <td>Version</td>
+                  <td>{{ info.version }}</td>
+                </tr>
+                {% if info.stv_name is defined %}
+                <tr>
+                  <td>SourceTV Name</td>
+                  <td>{{ info.stv_name }}</td>
                 </tr>
                 <tr>
-                  <td>VAC Enabled</td><td>{{ info.vac_enabled }}</td>
+                  <td>SourceTV Port</td>
+                  <td>{{ info.stv_port }}</td>
                 </tr>
-                <tr>
-                  <td>Version</td><td>{{ info.version }}</td>
-                </tr>
+                {% endif %}
               </tbody>
             </table>
           </div>
@@ -150,13 +185,17 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th>Name</th><th>Score</th><th>Time</th>
+                  <th>Name</th>
+                  <th>Score</th>
+                  <th>Time</th>
                 </tr>
               </thead>
               <tbody>
-                {% for player in players %}
+                {% for player in players|selectattr("name")|sort(attribute="score", reverse=True) %}
                 <tr>
-                  <td>{{ player.name }}</td><td>{{ player.score }}</td><td>{{ player.duration }}</td>
+                  <td>{{ player.name }}</td>
+                  <td>{{ player.score }}</td>
+                  <td>{{ player.duration|duration }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
