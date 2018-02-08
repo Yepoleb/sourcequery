@@ -4,7 +4,7 @@ Website for querying servers that support the [A2S] protocol.
 
 ## Supported Games
 
-Alien Swarm, Empires, Fistful of Frags, Garry's Mod, Half Life, Half Life 2, Just Cause 2, Left 4 Dead, Rust, Synergy, Team Fortress Classic, Team Fortress 2, ...
+Alien Swarm, Empires, Fistful of Frags, Garry's Mod, Half Life 2, Just Cause 2, Left 4 Dead, Rust, Synergy, Team Fortress 2, ...
 
 ## Runing locally
 
