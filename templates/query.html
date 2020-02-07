@@ -98,9 +98,9 @@
                 </tr>
                 <tr>
                   <td>Map</td>
-                  <td>{{ info.map }}</td>
+                  <td>{{ info.map_name }}</td>
                 </tr>
-                {% if info.keywords is defined %}
+                {% if info.has_keywords %}
                 <tr>
                   <td>Tags</td>
                   <td>{{ info.keywords|replace(",", ", ") }}</td>
@@ -110,27 +110,65 @@
                   <td>Bots</td>
                   <td>{{ info.bot_count }}</td>
                 </tr>
+                {% if info.app_id is defined %}
                 <tr>
                   <td>App ID</td>
+                  {% if info.game_id and info.game_id != info.app_id %}
+                  <td>{{ info.game_id }} [{{ info.app_id }}]</td>
+                  {% else %}
                   <td>{{ info.app_id }}</td>
+                  {% endif %}
                 </tr>
+                {% endif %}
                 <tr>
                   <td>Gamedir</td>
                   <td>{{ info.folder }}</td>
                 </tr>
-                {% if info.steam_id is defined %}
+                {% if info.is_mod is defined %}
                 <tr>
-                  <td>Steam ID</td>
+                  <td>Half-Life Mod</td>
+                  <td>{{ info.is_mod|yesno }}</td>
+                </tr>
+                <tr>
+                  <td>Custom DLL</td>
+                  <td>{{ (not info.uses_hl_dll)|yesno }}</td>
+                </tr>
+                {% if not info.uses_hl_dll %}
+                <tr>
+                  <td>Mod Website</td>
+                  <td>{{ info.mod_website }}</td>
+                </tr>
+                <tr>
+                  <td>Mod Download URL</td>
+                  <td>{{ info.mod_download }}</td>
+                </tr>
+                <tr>
+                  <td>Mod Version</td>
+                  <td>{{ info.mod_version }}</td>
+                </tr>
+                <tr>
+                  <td>Mod Size</td>
+                  <td>{{ info.mod_size|filesizeformat }}</td>
+                </tr>
+                <tr>
+                  <td>Multiplayer only</td>
+                  <td>{{ info.multiplayer_only|yesno }}</td>
+                </tr>
+                {% endif %}
+                {% endif %}
+                {% if info.has_steam_id %}
+                <tr>
+                  <td>Server Steam ID</td>
                   <td>{{ info.steam_id }}</td>
                 </tr>
                 {% endif %}
                 <tr>
                   <td>Platform</td>
-                  <td>{{ info.platform }}</td>
+                  <td>{{ info.platform|platform }}</td>
                 </tr>
                 <tr>
                   <td>Server Type</td>
-                  <td>{{ info.server_type }}</td>
+                  <td>{{ info.server_type|server_type }}</td>
                 </tr>
                 <tr>
                   <td>Password</td>
@@ -141,10 +179,10 @@
                   <td>{{ info.vac_enabled|yesno }}</td>
                 </tr>
                 <tr>
-                  <td>Version</td>
-                  <td>{{ info.version }}</td>
+                  <td>Game Version</td>
+                  <td>{{ info.version|default("Unknown") }}</td>
                 </tr>
-                {% if info.stv_name is defined %}
+                {% if info.has_stv %}
                 <tr>
                   <td>SourceTV Name</td>
                   <td>{{ info.stv_name }}</td>

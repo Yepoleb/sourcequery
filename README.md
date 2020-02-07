@@ -16,7 +16,7 @@ Check out the flask manual about [Deployment Options]. An example uwsgi configur
 
 ## Dependencies
 
-* [python-valve]
+* [python-a2s]
 * [flask]
 
 ## License
@@ -24,6 +24,6 @@ Check out the flask manual about [Deployment Options]. An example uwsgi configur
 AGPLv3
 
 [A2S]: https://developer.valvesoftware.com/wiki/Server_queries
-[python-valve]: https://github.com/Holiverh/python-valve
+[python-a2s]: https://github.com/Yepoleb/python-a2s
 [flask]: http://flask.pocoo.org/
 [Deployment Options]: http://flask.pocoo.org/docs/latest/deploying/

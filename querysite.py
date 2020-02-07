@@ -2,9 +2,11 @@ import concurrent.futures
 import socket
 
 import flask
-import valve.source
+import a2s
 
 
+
+QUERY_TIMEOUT = 3
 
 app = flask.Flask(__name__)
 
@@ -14,6 +16,22 @@ def yesno(value):
         return "Yes"
     else:
         return "No"
+
+@app.template_filter("server_type")
+def server_type(value):
+    return {
+        "d": "Dedicated",
+        "l": "Non-dedicated",
+        "p": "SourceTv relay"
+    }.get(value, value)
+
+@app.template_filter("platform")
+def platform(value):
+    return {
+        "l": "Linux",
+        "w": "Windows",
+        "m": "macOS"
+    }.get(value, value)
 
 @app.template_filter("duration")
 def format_duration(total_seconds):
@@ -63,21 +81,20 @@ def query():
         return flask.render_template("query.html", status="Error",
             error="Invalid server address.", server=server_arg), 400
 
-    # We need 2 queriers because requests are not thread safe
-    info_querier = valve.source.ServerQuerier((ip, port), timeout=3)
-    players_querier = valve.source.ServerQuerier((ip, port), timeout=3)
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-        info_future = pool.submit(info_querier.info)
-        players_future = pool.submit(players_querier.players)
+        info_future = pool.submit(
+            a2s.info, (ip, port), timeout=QUERY_TIMEOUT)
+        players_future = pool.submit(
+            a2s.players, (ip, port), timeout=QUERY_TIMEOUT)
     concurrent.futures.wait((info_future, players_future))
 
     info_except = info_future.exception()
     players_except = players_future.exception()
 
-    if type(info_except) == valve.source.NoResponseError:
+    if isinstance(info_except, socket.timeout):
         return flask.render_template("query.html", status="Error",
             error="Server did not respond.", server=server_arg), 200
-    elif type(info_except) == valve.source.BrokenMessageError:
+    elif isinstance(info_except, a2s.BrokenMessageError):
         return flask.render_template("query.html", status="Error",
             error="Server sent a broken response.", server=server_arg), 200
     elif info_except is not None:
@@ -85,18 +102,18 @@ def query():
 
     info_res = info_future.result()
 
-    if type(players_except) == valve.source.NoResponseError:
+    if isinstance(players_except, socket.timeout):
         return flask.render_template("query.html", status="InfoOnly",
             info=info_res, error="Server did not respond.",
             server=server_arg), 200
-    elif type(players_except) == valve.source.BrokenMessageError:
+    elif isinstance(players_except, a2s.BrokenMessageError):
         return flask.render_template("query.html", status="InfoOnly",
             info=info_res, error="Server sent a broken response.",
             server=server_arg), 200
     elif players_except is not None:
         raise players_except
 
-    players_res = players_future.result().players
+    players_res = players_future.result()
 
     return flask.render_template("query.html", status="Success",
         info=info_res, players=players_res, server=server_arg), 200
