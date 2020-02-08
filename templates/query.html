@@ -100,7 +100,7 @@
                   <td>Map</td>
                   <td>{{ info.map_name }}</td>
                 </tr>
-                {% if info.has_keywords %}
+                {% if info.keywords is not none %}
                 <tr>
                   <td>Tags</td>
                   <td>{{ info.keywords|replace(",", ", ") }}</td>
@@ -129,6 +129,7 @@
                   <td>Half-Life Mod</td>
                   <td>{{ info.is_mod|yesno }}</td>
                 </tr>
+                {% if info.mod_website is not none %}
                 <tr>
                   <td>Custom DLL</td>
                   <td>{{ (not info.uses_hl_dll)|yesno }}</td>
@@ -154,9 +155,10 @@
                   <td>Multiplayer only</td>
                   <td>{{ info.multiplayer_only|yesno }}</td>
                 </tr>
-                {% endif %}
-                {% endif %}
-                {% if info.has_steam_id %}
+                {% endif %} {# uses_hl_dll #}
+                {% endif %} {# not none #}
+                {% endif %} {# is_mod #}
+                {% if info.steam_id is not none %}
                 <tr>
                   <td>Server Steam ID</td>
                   <td>{{ info.steam_id }}</td>
@@ -178,11 +180,25 @@
                   <td>VAC Enabled</td>
                   <td>{{ info.vac_enabled|yesno }}</td>
                 </tr>
+                {% if info.version is defined %}
                 <tr>
                   <td>Game Version</td>
-                  <td>{{ info.version|default("Unknown") }}</td>
+                  <td>{{ info.version }}</td>
                 </tr>
-                {% if info.has_stv %}
+                {% endif %}
+                <tr>
+                  <td>Query Version</td>
+                  {% if info.is_mod is defined %}
+                  <td>GoldSource Legacy</td>
+                  {% else %}
+                  <td>Source</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Query Protocol</td>
+                  <td>{{ info.protocol }}</td>
+                </tr>
+                {% if info.stv_name is not none %}
                 <tr>
                   <td>SourceTV Name</td>
                   <td>{{ info.stv_name }}</td>
